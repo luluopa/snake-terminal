@@ -5,27 +5,28 @@
 #include <stdio.h>
 #include "snakecab.h"
 
-//snake from scratch no console feito com funÁ„o gotoxy 
+//snake from scratch no console feito com fun√ß√£o gotoxy 
 //made it by lucas lima
 
 //variaveis globais
 unsigned int global_tamanho_cobra = 3,qtd_maca=0,pontuacao=0;
 unsigned int Up=1,Down=2,Left=3,Right=4;
 unsigned int Keyword = Right;
+unsigned int check_clean = 4;
 
 bool check_game = 1;
 
-//declaraÁ„o do vetor cobra
+//declara√ß√£o do vetor cobra
 Snake cobra[100] = {{10,20},{10,19},{10,18}};
 
-//posiÁ„o est·tica da maÁa
+//posi√ß√£o est√°tica da ma√ßa
 int Apple::posicao_xp;
 int Apple::posicao_yp;
 
 Apple maca(20,20);
 
-//aqui a m·gica acontece, basicamente eu coloco um x e y e a funÁ„o gotoxy imprime
-//no console na posiÁ„o exata em que foi passada
+//aqui a m√°gica acontece, basicamente eu coloco um x e y e a fun√ß√£o gotoxy imprime
+//no console na posi√ß√£o exata em que foi passada
 void gotoxy(int x, int y,char print_user)
 {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
@@ -34,9 +35,9 @@ void gotoxy(int x, int y,char print_user)
 
 void Print_snake_apple()
 {
-	//printando a cabeÁa da snake
+	//printando a cabe√ßa da snake
 	gotoxy(cobra[0].posicao_x,cobra[0].posicao_y,'O');
-    //checando pra ver se a snake comeu a maÁa
+    //checando pra ver se a snake comeu a ma√ßa
 	if(cobra[0].posicao_x == maca.posicao_xp && cobra[0].posicao_y == maca.posicao_yp)
 	{
 		while((cobra[0].posicao_x == maca.posicao_xp && cobra[0].posicao_y == maca.posicao_yp)
@@ -58,7 +59,7 @@ void Print_snake_apple()
 		global_tamanho_cobra++;
 		pontuacao++;
 	}
-	//plotando na tela a maÁa
+	//plotando na tela a ma√ßa
 	gotoxy(maca.posicao_xp,maca.posicao_yp,'M');
 }
 
@@ -78,7 +79,7 @@ void voce_perdeu()
 //preciso sabe se voce quer continuar ou nao
 bool check_if_want_continue()
 {
-	//primeiramente apago a tela depois coloca a posiÁ„o do ponteiro
+	//primeiramente apago a tela depois coloca a posi√ß√£o do ponteiro
 	//e fica um gui bonitinho 
 	system("cls");
 	voce_perdeu();
@@ -90,8 +91,8 @@ bool check_if_want_continue()
 		gotoxy(37,pos_y,'<');	
 		if(kbhit())
 		{	
-			//se o usuario mexer no teclado a seta eu mudo a posiÁ„o dela
-			//dependendo do y em que o usuario der enter no caso sÛ dois
+			//se o usuario mexer no teclado a seta eu mudo a posi√ß√£o dela
+			//dependendo do y em que o usuario der enter no caso s√≥ dois
 			//y, eu dou reset no jogo ou acabo o jogo
 		    keyboard_char = getch();
 			switch(keyboard_char)
@@ -142,6 +143,11 @@ bool check_if_touch_snake()
 void Update_position()
 {
 	int aux,aux1;
+        if(check_clean == global_tamanho_cobra)
+    	{
+        	gotoxy(cobra[0].posicao_x,cobra[0].posicao_y,' ');
+    	        check_clean = NULL;			
+    	}
 	if(Keyword == Up)
 		cobra->Sum_posicao(0,-1);
 	else if(Keyword == Down)
@@ -150,11 +156,11 @@ void Update_position()
 		cobra->Sum_posicao(-1,0);
 	else if(Keyword == Right)
 		cobra->Sum_posicao(1,0);
-	//a snake È plotada na tela imprimindo a cabeÁa e deixando o rastro dela
-	// e na cauda dela eu vou apagando faÁo isso percorrendo todo o vetor da cobra
-	// de tr·s pra frente  atribuindo a posiÁ„o anterior de um para o de tr·s
-	//na ponta da cauda eu faÁo atribuiÁ„o tambÈm, porÈm depois de atribuir eu 
-	//apago a ultima posiÁ„o, pra cobra n„o ficar plotando infinitamente
+	//a snake √© plotada na tela imprimindo a cabe√ßa e deixando o rastro dela
+	// e na cauda dela eu vou apagando fa√ßo isso percorrendo todo o vetor da cobra
+	// de tr√°s pra frente  atribuindo a posi√ß√£o anterior de um para o de tr√°s
+	//na ponta da cauda eu fa√ßo atribui√ß√£o tamb√©m, por√©m depois de atribuir eu 
+	//apago a ultima posi√ß√£o, pra cobra n√£o ficar plotando infinitamente
 	for(int i=global_tamanho_cobra;i>0;i--)
 	{
 		aux = cobra[i].posicao_x;
@@ -201,6 +207,7 @@ void Jogo()
 		{		
 			if(check_if_want_continue())
 			{
+				check_clean = 4;
 				system("cls");
 				global_tamanho_cobra = 4;	
 				maca.Set_pos(20,20);
@@ -215,7 +222,7 @@ void Jogo()
 		}
 	}
 }
-//n„o gosto de colocar muitas coisas na main sla ksksksksk
+//n√£o gosto de colocar muitas coisas na main sla ksksksksk
 int main()
 {
 	while(true)
