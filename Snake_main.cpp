@@ -41,8 +41,8 @@ void Print_snake_apple()
 	if(cobra[0].posicao_x == maca.posicao_xp && cobra[0].posicao_y == maca.posicao_yp)
 	{
 		while((cobra[0].posicao_x == maca.posicao_xp && cobra[0].posicao_y == maca.posicao_yp)
-		|| (maca.posicao_yp <= 0 || maca.posicao_xp <= 0)
-        || (maca.posicao_yp >= lenght-2 || maca.posicao_xp >= height-2))   
+		|| (maca.posicao_yp <= 1 || maca.posicao_xp <= 1)
+        || (maca.posicao_yp >= lenght-1 || maca.posicao_xp >= height-1))   
 		{
 			for(int i=global_tamanho_cobra;i>1;i--)
 			{
