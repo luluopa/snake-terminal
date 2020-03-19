@@ -9,7 +9,7 @@
 //made it by lucas lima
 
 //variaveis globais
-unsigned int global_tamanho_cobra = 3,qtd_maca=0,pontuacao=0;
+unsigned int global_tamanho_cobra = 4,qtd_maca=0,pontuacao=0;
 unsigned int Up=1,Down=2,Left=3,Right=4;
 unsigned int Keyword = Right;
 unsigned int check_clean = 4;
@@ -37,22 +37,13 @@ void Print_snake_apple()
 {
 	//printando a cabeça da snake
 	gotoxy(cobra[0].posicao_x,cobra[0].posicao_y,'O');
-    //checando pra ver se a snake comeu a maça
+        //checando pra ver se a snake comeu a maça
 	if(cobra[0].posicao_x == maca.posicao_xp && cobra[0].posicao_y == maca.posicao_yp)
 	{
 		while((cobra[0].posicao_x == maca.posicao_xp && cobra[0].posicao_y == maca.posicao_yp)
 		|| (maca.posicao_yp <= 1 || maca.posicao_xp <= 1)
-        || (maca.posicao_yp >= lenght-1 || maca.posicao_xp >= height-1))   
+                || (maca.posicao_yp >= lenght-2 || maca.posicao_xp >= height-2))   
 		{
-			for(int i=global_tamanho_cobra;i>1;i--)
-			{
-				if(maca.posicao_xp == cobra[i].posicao_x
-				&& maca.posicao_yp == cobra[i].posicao_y)
-				{
-					maca.posicao_xp = rand()%70;
-		        	maca.posicao_yp = rand()%20;
-				}
-			}
 			maca.posicao_xp = rand()%70;
 			maca.posicao_yp = rand()%20;
 		}
