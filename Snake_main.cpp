@@ -1,32 +1,51 @@
+//Snake from scratch in console made it using gotoxy function [only works on windows though] 
+//Made it by Lucas Lima
+
 #include <iostream>
 #include <stdlib.h>
-#include <conio.h>
+#include <curses.h>
 #include <windows.h>
 #include <stdio.h>
-#include "snakecab.h"
+#include "snakeHeader.h"
 
-//snake from scratch no console feito com função gotoxy 
-//made it by lucas lima
-
-//variaveis globais
 unsigned int global_tamanho_cobra = 4,qtd_maca=0,pontuacao=0;
 unsigned int Up=1,Down=2,Left=3,Right=4;
 unsigned int Keyword = Right;
 unsigned int check_clean = 4;
 
-bool check_game = 1;
-
-//declaração do vetor cobra
 Snake cobra[100] = {{10,20},{10,19},{10,18}};
 
-//posição estática da maça
 int Apple::posicao_xp;
 int Apple::posicao_yp;
 
 Apple maca(20,20);
 
-//aqui a mágica acontece, basicamente eu coloco um x e y e a função gotoxy imprime
-//no console na posição exata em que foi passada
+class Player {
+private:
+	int points;
+	char keyboardHit;
+public:
+	Player(int points=0) {
+		this->points = points;
+	}
+
+	int getPoints() {
+		return this->points;
+	}
+
+	char getKeyboardHit() {
+		return this->keyboardHit;
+	}
+
+	void setKeyboardHit(char caracter) {
+		this->keyboardHit = caracter;
+	}
+
+	void increasePoints(int increment=1) {
+		this->points += increment;
+	}
+};
+
 void gotoxy(int x, int y,char print_user)
 {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
@@ -162,36 +181,53 @@ void Update_position()
 	    	gotoxy(aux,aux1,' ');
 	}
 }
-//chamando todas as funcs pra fazer o jogo funcionar de fato
-void Jogo()
-{
-	inicializar_mapa();
-	char keyboard_char;
-	while(check_game)
+
+bool ifPlayerHitTheKeyboard() {
+	return kbhit();
+}
+
+void changePlayerKeyboardChar(Player* player){
+	if ifPlayerHitTheKeyboard() {
+		player->setKeyboardHit(getch());
+	}
+}
+
+void delayTime(int timeDelayer){
+	for(int i=0;i<=timeDelayer;i++);
+}
+
+void Game() {
+
+	constructMap();
+	Player player = new Player();
+	bool isGameRunning = true;
+
+	while(isGameRunning)
 	{
 		Print_snake_apple();
 		Update_position();
-		if(kbhit()){keyboard_char = getch();}
-        for(int i=0;i<=30000000;i++);
-		switch (keyboard_char)
-		{
-			case'w':
+		changePlayerKeyboardChar();
+		delayTime(3000000000);
+
+		switch (keyboard_char) {
+			case 'w':
 				if(Keyword != Down)
 					Keyword = Up;
 				break;
-			case's':
+			case 's':
 				if(Keyword != Up)
 					Keyword = Down;
 				break;
-			case'a':
+			case 'a':
 				if(Keyword != Right)
 					Keyword = Left;
 				break;
-			case'd':
+			case 'd':
 				if(Keyword != Left)
 					Keyword = Right;
 				break;
 		}
+		
 		if((cobra[0].posicao_x <= 1 || cobra[0].posicao_x >= height)
 		|| (cobra[0].posicao_y >= lenght || cobra[0].posicao_y <= 1)
         || (check_if_touch_snake()))    
@@ -213,14 +249,10 @@ void Jogo()
 		}
 	}
 }
-//não gosto de colocar muitas coisas na main sla ksksksksk
-int main()
-{
-	while(true)
-	{
-		Jogo();
-		break;
-	}
-	std::cout << "\n\n\n\n\n";
+
+int main() {
+
+	Game();
+	
 	return 0;
 }
