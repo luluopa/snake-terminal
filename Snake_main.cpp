@@ -7,26 +7,21 @@
 #include <windows.h>
 #include <stdio.h>
 #include "snakeHeader.h"
-
-unsigned int global_tamanho_cobra = 4,qtd_maca=0,pontuacao=0;
-unsigned int Up=1,Down=2,Left=3,Right=4;
-unsigned int Keyword = Right;
-unsigned int check_clean = 4;
-
-Snake cobra[100] = {{10,20},{10,19},{10,18}};
-
-int Apple::posicao_xp;
-int Apple::posicao_yp;
-
-Apple maca(20,20);
+#include <vector>
 
 class Player {
 private:
 	int points;
 	char keyboardHit;
+	Snake* snake;
 public:
-	Player(int points=0) {
+	Player(int points=0, int ) {
 		this->points = points;
+		this->snake = new Snake();
+	}
+
+	Snake* getSnake() {
+		return this->snake;
 	}
 
 	int getPoints() {
@@ -46,8 +41,7 @@ public:
 	}
 };
 
-void gotoxy(int x, int y,char print_user)
-{
+void gotoxy(int x, int y,char print_user) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 	std::cout << print_user;
 }
@@ -86,11 +80,8 @@ void voce_perdeu()
 	gotoxy(30,14,' ');
 	std::cout << "[Nao]";
 }
-//preciso sabe se voce quer continuar ou nao
-bool check_if_want_continue()
-{
-	//primeiramente apago a tela depois coloca a posição do ponteiro
-	//e fica um gui bonitinho 
+
+bool check_if_want_continue() {
 	system("cls");
 	voce_perdeu();
 	int pos_y = 13;
@@ -158,13 +149,13 @@ void Update_position()
         	gotoxy(cobra[0].posicao_x,cobra[0].posicao_y,' ');
     	        check_clean = NULL;			
     	}
-	if(Keyword == Up)
+	if(player.getKeyboardHit() == Up)
 		cobra->Sum_posicao(0,-1);
-	else if(Keyword == Down)
+	else if(player.getKeyboardHit() == Down)
 		cobra->Sum_posicao(0,1);
-	else if(Keyword == Left)
+	else if(player.getKeyboardHit() == Left)
 		cobra->Sum_posicao(-1,0);
-	else if(Keyword == Right)
+	else if(player.getKeyboardHit() == Right)
 		cobra->Sum_posicao(1,0);
 	//a snake é plotada na tela imprimindo a cabeça e deixando o rastro dela
 	// e na cauda dela eu vou apagando faço isso percorrendo todo o vetor da cobra
@@ -196,51 +187,61 @@ void delayTime(int timeDelayer){
 	for(int i=0;i<=timeDelayer;i++);
 }
 
+void changeKeyboardPlayer(Player* player) {
+	switch (player->getKeyboardHit()) {
+		case 'w':
+			if(player.getKeyboardHit() != Down)
+				player.setKeyboardHit(Up);
+			break;
+		case 's':
+			if(player.getKeyboardHit() != Up)
+				player.getKeyboardHit() = Down;
+			break;
+		case 'a':
+			if(player.getKeyboardHit() != Right)
+				player.getKeyboardHit() = Left;
+			break;
+		case 'd':
+			if(player.getKeyboardHit() != Left)
+				player.getKeyboardHit() = Right;
+			break;
+	}
+}
+
+void cleanScreen() {
+	system("cls");
+}
+
+void reset(Player* player, Apple* apple) {
+	check_clean = 4;
+	cleanScreen();	
+	apple->resetApple();
+	player->getSnake()->snakeReset();
+	constructMap();
+}
+
 void Game() {
 
 	constructMap();
 	Player player = new Player();
 	bool isGameRunning = true;
+	Apple apple(20,20);
 
-	while(isGameRunning)
-	{
+	while(isGameRunning) {
+
 		Print_snake_apple();
 		Update_position();
 		changePlayerKeyboardChar();
 		delayTime(3000000000);
+		changeKeyboardPlayer(player);
 
-		switch (keyboard_char) {
-			case 'w':
-				if(Keyword != Down)
-					Keyword = Up;
-				break;
-			case 's':
-				if(Keyword != Up)
-					Keyword = Down;
-				break;
-			case 'a':
-				if(Keyword != Right)
-					Keyword = Left;
-				break;
-			case 'd':
-				if(Keyword != Left)
-					Keyword = Right;
-				break;
-		}
-		
 		if((cobra[0].posicao_x <= 1 || cobra[0].posicao_x >= height)
 		|| (cobra[0].posicao_y >= lenght || cobra[0].posicao_y <= 1)
         || (check_if_touch_snake()))    
 		{		
 			if(check_if_want_continue())
-			{
-				check_clean = 4;
-				system("cls");
-				global_tamanho_cobra = 4;	
-				maca.Set_pos(20,20);
-				cobra[0].posicao_x = 10;
-				cobra[0].posicao_y = 10;
-				inicializar_mapa();	
+			{	
+
 			}
 			else
 			{
@@ -251,7 +252,6 @@ void Game() {
 }
 
 int main() {
-
 	Game();
 	
 	return 0;

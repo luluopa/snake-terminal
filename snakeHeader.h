@@ -4,12 +4,19 @@
 #define LENGTH 25
 #define HEIGHT 75
 
+extern const int Up;
+extern const int Down;
+extern const int Left;
+extern const int Right;
+extern const int check_clean;
+
 class Apple {
 public:
 	static int pos_x;
 	static int pos_y;
 	Apple(int pos_x, int pos_y);
-	void setPosicao(int set_x, int set_y);
+	void setPosition(int set_x, int set_y);
+	void resetApple();
 };
 
 class Map {
@@ -27,12 +34,25 @@ public:
 	int getHeight();
 };
 
-class Snake {
+class Body {
 public:
     int pos_x;
     int pos_y;
-	Snake(int pos_x, int pos_y);
-	void sumPosicao(int set_x, int set_y);
+	Body(int pos_x, int pos_y);
+	void incrementPosition(int set_x, int set_y);
+	int snakeSize();
+};
+
+class Snake {
+private:
+	std::vector<Body>* snake;
+public:
+	Snake();
+	int getSize();
+	void snakeReset();
+private:
+	void constructSnake(std::vector<std::vector<int>> body);
+	void constructSnake();
 };
 
 bool isLineOnBottomOrTop(int line, int bottom=0, int height);
