@@ -3,7 +3,7 @@
 ## Requirements
 
 Before starting, verify if you have attend the minimum requirements:
-* You have GNU c++ or any C++ compiler compatible with the source code.
+* You have GNU C++ or any C++ compiler compatible with the source code.
 * You are in Windows 7 or above.
 * You have read the documentation of the project.
 
@@ -43,4 +43,4 @@ Collaborators who helped creating the project:
 
 Look at the file: [LICENSE](LICENSE) if you wanna see the details.
 
-[⬆ Back to the top](#AgroFlow)<br>
+[⬆ Back to the top](#Snake Terminal)<br>
