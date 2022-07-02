@@ -63,6 +63,10 @@ void Body::incrementPosition(int new_posX, int new_posY) {
 	this->pos_y += new_posY;
 }
 
+std::vector<int>* Body::getPosition() {
+	return new std::vector<int>{pos_x, pos_y};
+}
+
 Snake::Snake() {
 	this->constructSnake();
 }
@@ -87,6 +91,14 @@ void Snake::snakeReset() {
 
 int Snake::getSize() {
 	return this->snake->size();
+}
+
+Body* Snake::getHead() {
+	return &(this->snake->at(0));
+}
+
+std::vector<Body>* Snake::getSnake() {
+	return this->snake;
 }
 
 bool isLineOnBottomOrTop(int line, int bottom=0, int height) {

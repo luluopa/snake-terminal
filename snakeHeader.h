@@ -35,12 +35,13 @@ public:
 };
 
 class Body {
-public:
+private:
     int pos_x;
     int pos_y;
+public:
 	Body(int pos_x, int pos_y);
 	void incrementPosition(int set_x, int set_y);
-	int snakeSize();
+	std::vector<int>* getPosition();
 };
 
 class Snake {
@@ -50,6 +51,8 @@ public:
 	Snake();
 	int getSize();
 	void snakeReset();
+	Body* getHead();
+	std::vector<Body>* getSnake();
 private:
 	void constructSnake(std::vector<std::vector<int>> body);
 	void constructSnake();
