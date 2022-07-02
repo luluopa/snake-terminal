@@ -43,4 +43,4 @@ Collaborators who helped creating the project:
 
 Look at the file: [LICENSE](LICENSE) if you wanna see the details.
 
-[⬆ Back to the top](#Snake Terminal)<br>
+[⬆ Back to the top](#Snake%Terminal)<br>
